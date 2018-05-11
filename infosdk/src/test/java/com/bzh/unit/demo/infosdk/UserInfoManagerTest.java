@@ -20,17 +20,13 @@ public class UserInfoManagerTest {
 
     @Test
     public void getInstance() {
-        UserInfoManager instance = UserInfoManager.getInstance();
-
-        // 断言：instance不为null
-        assertThat(instance, is(notNullValue()));
+        UserInfoManager instance = getNewInstance();
     }
 
     @Test
     public void getAllUserInfoSync() {
 
-        UserInfoManager instance = UserInfoManager.getInstance();
-        assertThat(instance, is(notNullValue()));
+        UserInfoManager instance = getNewInstance();
 
         // 验证结果为空
         // 由于只是验证getAllUserInfoSync方法是否调用成功
@@ -42,8 +38,7 @@ public class UserInfoManagerTest {
     @Test
     public void getAllUserInfoSync_memoryCacheExist() {
 
-        UserInfoManager instance = UserInfoManager.getInstance();
-        assertThat(instance, is(notNullValue()));
+        UserInfoManager instance = getNewInstance();
 
         // 模拟内存中存在数据
         instance.mAllUserInfo = new ArrayList<UserInfo>();
@@ -52,4 +47,17 @@ public class UserInfoManagerTest {
         List<UserInfo> userInfoList = instance.getAllUserInfoSync();
         assertThat(userInfoList, is(notNullValue()));
     }
+
+    @Test
+    public void getAllUserInfoSync_memoryCacheNull_diskCacheExist(){
+
+    }
+
+    // Refactor Get Instance Method
+    private UserInfoManager getNewInstance() {
+        UserInfoManager instance = UserInfoManager.getInstance();
+        assertThat(instance, is(notNullValue()));
+        return instance;
+    }
+
 }
