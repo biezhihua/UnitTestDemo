@@ -3,9 +3,15 @@ package com.bzh.unit.demo;
 import android.os.Handler;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -13,8 +19,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Static.class})
 public class ExampleUnitTest {
 
+    @Test
+    public void testStaticMethod() {
+        PowerMockito.mockStatic(Static.class);
+
+        when(Static.isPass()).thenReturn(true);
+
+        assertThat(true, is(Static.isPass()));
+    }
 
     @Test
     public void testHandler() {
