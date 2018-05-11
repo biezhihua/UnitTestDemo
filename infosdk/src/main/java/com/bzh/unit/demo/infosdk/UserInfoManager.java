@@ -4,6 +4,8 @@ import java.util.List;
 
 class UserInfoManager {
 
+    List<UserInfo> mAllUserInfo;
+
     private UserInfoManager() {
 
     }
@@ -17,6 +19,6 @@ class UserInfoManager {
     }
 
     public List<UserInfo> getAllUserInfoSync() {
-        return null;
+        return mAllUserInfo;
     }
 }
