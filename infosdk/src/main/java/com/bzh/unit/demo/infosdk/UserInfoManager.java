@@ -1,5 +1,7 @@
 package com.bzh.unit.demo.infosdk;
 
+import java.util.List;
+
 class UserInfoManager {
 
     private UserInfoManager() {
@@ -12,5 +14,9 @@ class UserInfoManager {
 
     private static class InnerUserInfoManager {
         static UserInfoManager sInstance = new UserInfoManager();
+    }
+
+    public List<UserInfo> getAllUserInfoSync() {
+        return null;
     }
 }
