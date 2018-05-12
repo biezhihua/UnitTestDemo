@@ -6,9 +6,11 @@ class UserInfoManager {
 
     List<UserInfo> mAllUserInfo;
     private FileCacheHelper mFileCacheHelper;
+    private NetHelper mNetHelper;
 
-    UserInfoManager(FileCacheHelper fileCacheHelper) {
+    UserInfoManager(FileCacheHelper fileCacheHelper, NetHelper netHelper) {
         mFileCacheHelper = fileCacheHelper;
+        mNetHelper = netHelper;
     }
 
     public static UserInfoManager getInstance() {
@@ -16,7 +18,7 @@ class UserInfoManager {
     }
 
     private static class InnerUserInfoManager {
-        static UserInfoManager sInstance = new UserInfoManager(FileCacheHelper.getInstance());
+        static UserInfoManager sInstance = new UserInfoManager(FileCacheHelper.getInstance(), NetHelper.getInstance());
     }
 
     public List<UserInfo> getAllUserInfoSync() {
@@ -32,6 +34,8 @@ class UserInfoManager {
             return mAllUserInfo;
         }
 
-        return null;
+        // 获取网络数据，将值赋给内存缓存并返回数据
+        mAllUserInfo = mNetHelper.getAllUserInfoFromNet();
+        return mAllUserInfo;
     }
 }

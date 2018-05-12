@@ -24,6 +24,9 @@ public class UserInfoManagerTest {
     @Mock
     FileCacheHelper mFileCacheHelper;
 
+    @Mock
+    NetHelper mNetHelper;
+
     @Test
     public void getInstance() {
         UserInfoManager instance = getNewInstance();
@@ -58,7 +61,7 @@ public class UserInfoManagerTest {
     public void getAllUserInfoSync_memoryCacheNull_diskCacheExist() {
         UserInfoManager instance = getNewInstance();
 
-        // 假设逻辑调用mFileCacheHelper.getAllUserInfoCache()时，返回一个空列表
+        // 模拟获取文件缓存数据时，返回一个空列表
         when(mFileCacheHelper.getAllUserInfoCache()).thenReturn(new ArrayList<UserInfo>());
 
         // 验证文件缓存值存在，获取结果不为null
@@ -66,14 +69,30 @@ public class UserInfoManagerTest {
         assertThat(userInfoList, is(notNullValue()));
     }
 
+    @Test
+    public void getAllUserInfoSync_memoryCacheNull_diskCacheNull_requestNet() {
+        UserInfoManager instance = getNewInstance();
+
+        // 模拟获取网络数据时，返回一个空列表
+        when(mFileCacheHelper.getAllUserInfoCache()).thenReturn(new ArrayList<UserInfo>());
+
+
+        // 验证网络数据值存在，获取结果不为null
+        List<UserInfo> userInfoList = instance.getAllUserInfoSync();
+        assertThat(userInfoList, is(notNullValue()));
+    }
+
     // Refactor Get Instance Method
     private UserInfoManager getNewInstance() {
 
-        UserInfoManager instance = new UserInfoManager(mFileCacheHelper);
+        UserInfoManager instance = new UserInfoManager(mFileCacheHelper, mNetHelper);
         assertThat(instance, is(notNullValue()));
 
         // 让FileCacheHelper.getAllUserInfoCache默认返回null
         when(mFileCacheHelper.getAllUserInfoCache()).thenReturn(null);
+
+        // 让NetHelper.getAllUserInfoFromNet默认返回null
+        when(mNetHelper.getAllUserInfoFromNet()).thenReturn(null);
 
         return instance;
     }
