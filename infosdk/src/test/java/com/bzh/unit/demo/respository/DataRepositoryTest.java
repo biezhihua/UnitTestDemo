@@ -20,16 +20,20 @@ public class DataRepositoryTest {
 
     @Test
     public void getInstance() {
-        DataRepository instance = DataRepository.getInstance();
+        DataRepository instance = getNewInstance();
 
+    }
+
+    private DataRepository getNewInstance() {
+        DataRepository instance = DataRepository.getInstance();
         // 断言：instance不为null
         assertThat(instance, is(notNullValue()));
+        return instance;
     }
 
     @Test
     public void getAllVideoSync() {
-        DataRepository instance = DataRepository.getInstance();
-        assertThat(instance, is(notNullValue()));
+        DataRepository instance = getNewInstance();
 
         // 验证结果为空
         // 由于只是验证getAllVideoSync方法是否调用成功
@@ -39,10 +43,9 @@ public class DataRepositoryTest {
     }
 
     @Test
-    public void getAllUserInfoSync_memoryCacheExist() {
+    public void getAllVideoSync_memoryCacheExist() {
 
-        DataRepository instance = DataRepository.getInstance();
-        assertThat(instance, is(notNullValue()));
+        DataRepository instance = getNewInstance();
 
         // 模拟内存中存在数据
         instance.mAllVideoInfo = new ArrayList<VideoInfo>();
@@ -50,5 +53,10 @@ public class DataRepositoryTest {
         // 验证内存缓存值存在，获取结果不为null
         List<VideoInfo> videoInfos = instance.getAllVideoSync();
         assertThat(videoInfos, is(notNullValue()));
+    }
+
+    @Test
+    public void getAllVideoSync_memoryCacheNull_diskCacheExist() {
+
     }
 }
