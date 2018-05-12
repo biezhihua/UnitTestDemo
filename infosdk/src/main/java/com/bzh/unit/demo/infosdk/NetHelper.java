@@ -13,6 +13,7 @@ class NetHelper {
     }
 
     public List<UserInfo> getAllUserInfoFromNet() {
+        // TODO
         return null;
     }
 

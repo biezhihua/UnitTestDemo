@@ -13,7 +13,12 @@ class FileCacheHelper {
     }
 
     public List<UserInfo> getAllUserInfoCache() {
+        // TODO
         return null;
+    }
+
+    public void saveDataToCache(List<UserInfo> data) {
+        // TODO
     }
 
     private static class InnerClass {

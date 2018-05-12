@@ -36,6 +36,12 @@ class UserInfoManager {
 
         // 获取网络数据，将值赋给内存缓存并返回数据
         mAllUserInfo = mNetHelper.getAllUserInfoFromNet();
+
+        // 若数据不为空，则将数据保存到文件缓存中
+        if (mAllUserInfo != null) {
+            mFileCacheHelper.saveDataToCache(mAllUserInfo);
+        }
+
         return mAllUserInfo;
     }
 }
