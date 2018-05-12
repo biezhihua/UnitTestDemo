@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -73,11 +74,27 @@ public class DataRepositoryTest {
         DataRepository instance = getNewInstance();
 
         // 模拟获取网络数据时，返回一个空列表
-        when(mFileCacheHelper.getAllVideoCache()).thenReturn(new ArrayList<VideoInfo>());
+        when(mNetHelper.getAllVideoInfoFromNet()).thenReturn(new ArrayList<VideoInfo>());
 
         // 验证网络数据值存在，获取结果不为null
         List<VideoInfo> userInfoList = instance.getAllVideoSync();
         assertThat(userInfoList, is(notNullValue()));
+    }
+
+    @Test
+    public void getAllVideoSync_memoryCacheNull_diskCacheNull_requestNet_saveCache() {
+        DataRepository instance = getNewInstance();
+
+        List<VideoInfo> list = new ArrayList<>();
+        // 模拟获取网络数据时，返回一个空列表
+        when(mNetHelper.getAllVideoInfoFromNet()).thenReturn(list);
+
+
+        List<VideoInfo> userInfoList = instance.getAllVideoSync();
+        assertThat(userInfoList, is(notNullValue()));
+
+        // 验证行为，保存到缓存中是否被执行了
+        verify(mFileCacheHelper).saveDataToCache(list);
     }
 
     private DataRepository getNewInstance() {

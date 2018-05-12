@@ -33,6 +33,12 @@ class DataRepository {
 
         // 获取网络数据，将值赋给内存缓存并返回数据
         mAllVideoInfo = mNetHelper.getAllVideoInfoFromNet();
+
+        // 若数据不为空，则将数据保存到文件缓存中
+        if (mAllVideoInfo != null) {
+            mFileCacheHelper.saveDataToCache(mAllVideoInfo);
+        }
+
         return mAllVideoInfo;
     }
 

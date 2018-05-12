@@ -12,7 +12,12 @@ class FileCacheHelper {
     }
 
     public List<VideoInfo> getAllVideoCache() {
+        // TODO
         return null;
+    }
+
+    public void saveDataToCache(List<VideoInfo> allVideoInfo) {
+        // TODO
     }
 
     private static class InnerClass {
