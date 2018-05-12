@@ -1,8 +1,9 @@
-package com.bzh.unit.demo.respository;
+package com.bzh.unit.demo.repository;
 
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -13,22 +14,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({})
 public class DataRepositoryTest {
 
+    // 模拟一个FileCacheHelper实例
+    @Mock
+    FileCacheHelper mFileCacheHelper;
+
     @Test
     public void getInstance() {
         DataRepository instance = getNewInstance();
-
-    }
-
-    private DataRepository getNewInstance() {
-        DataRepository instance = DataRepository.getInstance();
-        // 断言：instance不为null
-        assertThat(instance, is(notNullValue()));
-        return instance;
     }
 
     @Test
@@ -57,6 +55,27 @@ public class DataRepositoryTest {
 
     @Test
     public void getAllVideoSync_memoryCacheNull_diskCacheExist() {
+        DataRepository instance = getNewInstance();
 
+        // 假设逻辑调用mFileCacheHelper.getAllVideoCache()时，返回一个空列表
+        when(mFileCacheHelper.getAllVideoCache()).thenReturn(new ArrayList<VideoInfo>());
+
+        // 验证文件缓存值存在，获取结果不为null
+        List<VideoInfo> userInfoList = instance.getAllVideoSync();
+        assertThat(userInfoList, is(notNullValue()));
     }
+
+    private DataRepository getNewInstance() {
+
+        DataRepository instance = new DataRepository(mFileCacheHelper);
+
+        // 断言：instance不为null
+        assertThat(instance, is(notNullValue()));
+
+        // 让FileCacheHelper.getAllUserInfoCache默认返回null
+        when(mFileCacheHelper.getAllVideoCache()).thenReturn(null);
+
+        return instance;
+    }
+
 }
