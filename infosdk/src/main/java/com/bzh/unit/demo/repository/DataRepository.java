@@ -6,9 +6,11 @@ class DataRepository {
 
     List<VideoInfo> mAllVideoInfo;
     private FileCacheHelper mFileCacheHelper;
+    private NetHelper mNetHelper;
 
-    DataRepository(FileCacheHelper fileCacheHelper) {
+    DataRepository(FileCacheHelper fileCacheHelper, NetHelper netHelper) {
         mFileCacheHelper = fileCacheHelper;
+        mNetHelper = netHelper;
     }
 
     public static DataRepository getInstance() {
@@ -27,10 +29,14 @@ class DataRepository {
         if (mAllVideoInfo != null) {
             return mAllVideoInfo;
         }
+
+
+        // 获取网络数据，将值赋给内存缓存并返回数据
+        mAllVideoInfo = mNetHelper.getAllVideoInfoFromNet();
         return mAllVideoInfo;
     }
 
     private static class InnerClass {
-        static DataRepository sInstance = new DataRepository(FileCacheHelper.getInstance());
+        static DataRepository sInstance = new DataRepository(FileCacheHelper.getInstance(), NetHelper.getInstance());
     }
 }

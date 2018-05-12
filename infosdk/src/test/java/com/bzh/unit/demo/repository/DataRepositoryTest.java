@@ -24,6 +24,9 @@ public class DataRepositoryTest {
     @Mock
     FileCacheHelper mFileCacheHelper;
 
+    @Mock
+    NetHelper mNetHelper;
+
     @Test
     public void getInstance() {
         DataRepository instance = getNewInstance();
@@ -65,15 +68,30 @@ public class DataRepositoryTest {
         assertThat(userInfoList, is(notNullValue()));
     }
 
+    @Test
+    public void getAllVideoSync_memoryCacheNull_diskCacheNull_requestNet() {
+        DataRepository instance = getNewInstance();
+
+        // 模拟获取网络数据时，返回一个空列表
+        when(mFileCacheHelper.getAllVideoCache()).thenReturn(new ArrayList<VideoInfo>());
+
+        // 验证网络数据值存在，获取结果不为null
+        List<VideoInfo> userInfoList = instance.getAllVideoSync();
+        assertThat(userInfoList, is(notNullValue()));
+    }
+
     private DataRepository getNewInstance() {
 
-        DataRepository instance = new DataRepository(mFileCacheHelper);
+        DataRepository instance = new DataRepository(mFileCacheHelper, mNetHelper);
 
         // 断言：instance不为null
         assertThat(instance, is(notNullValue()));
 
-        // 让FileCacheHelper.getAllUserInfoCache默认返回null
+        // 让FileCacheHelper.getAllVideoCache默认返回null
         when(mFileCacheHelper.getAllVideoCache()).thenReturn(null);
+
+        // 让NetHelper.getAllVideoInfoFromNet默认返回null
+        when(mNetHelper.getAllVideoInfoFromNet()).thenReturn(null);
 
         return instance;
     }
