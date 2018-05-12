@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,5 +36,19 @@ public class DataRepositoryTest {
         // 所以本次并不关心结果中是否含有数据
         List<VideoInfo> userInfoList = instance.getAllVideoSync();
         assertThat(userInfoList, is(nullValue()));
+    }
+
+    @Test
+    public void getAllUserInfoSync_memoryCacheExist() {
+
+        DataRepository instance = DataRepository.getInstance();
+        assertThat(instance, is(notNullValue()));
+
+        // 模拟内存中存在数据
+        instance.mAllVideoInfo = new ArrayList<VideoInfo>();
+
+        // 验证内存缓存值存在，获取结果不为null
+        List<VideoInfo> videoInfos = instance.getAllVideoSync();
+        assertThat(videoInfos, is(notNullValue()));
     }
 }

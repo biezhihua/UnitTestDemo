@@ -4,6 +4,8 @@ import java.util.List;
 
 class DataRepository {
 
+    List<VideoInfo> mAllVideoInfo;
+
     private DataRepository() {
 
     }
@@ -13,7 +15,7 @@ class DataRepository {
     }
 
     public List<VideoInfo> getAllVideoSync() {
-        return null;
+        return mAllVideoInfo;
     }
 
     private static class InnerClass {
